@@ -11,5 +11,5 @@ workflows:
           create-repo: true
           dockerfile: Dockerfile
           path: .
-          repo: circleci-ecr-demo
+          repo: circleci-ecr-app-demo
           tag: "$CIRCLE_SHA1"
