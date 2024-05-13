@@ -4,6 +4,7 @@ orbs:
   aws-cli: circleci/aws-cli@3.1.1
   aws-ecr: circleci/aws-ecr@8.1.3
   node: circleci/node@4.7
+  discord: antonioned/discord@0.1.0
 
 jobs:
   build-test-deploy-api-svc:
@@ -22,6 +23,8 @@ jobs:
           create-repo: true
       - run: >-
           aws ecs update-service --force-new-deployment --service $AWS_ECS_API_SVC_SERVICE_NAME --cluster $AWS_ECS_SHR_CLUSTER_NAME
+      - discord/status:
+          webhook: $DISCORD_NOTIFICATIONS_WEBHOOK_URL
 
 
 workflows:
