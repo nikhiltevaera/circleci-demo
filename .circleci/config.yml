@@ -1,15 +1,34 @@
 version: 2.1
 
 orbs:
+  aws-cli: circleci/aws-cli@3.1.1
   aws-ecr: circleci/aws-ecr@8.1.3
+  node: circleci/node@4.7
+
+jobs:
+  build-test-deploy-api-svc:
+    docker:
+      - image: cimg/node:20.13
+    steps:
+      - aws-ecr/build-and-push-image:
+          extra-build-args: '--compress'
+          no-output-timeout: 20m
+          path: .
+          push-image: true
+          repo: $AWS_ECR_API_SVC_REPO_NAME
+          setup-remote-docker: true
+          tag: 'latest,$MAJOR_VERSION.$CIRCLE_BUILD_NUM'
+      - run: >-
+          aws ecs update-service --force-new-deployment --service $AWS_ECS_API_SVC_SERVICE_NAME --cluster $AWS_ECS_SHR_CLUSTER_NAME
+
 
 workflows:
-  build_and_push_image:
+  deployment:
     jobs:
-      - aws-ecr/build-and-push-image:
-          context: aws-backend-dev
-          create-repo: true
-          dockerfile: Dockerfile
-          path: .
-          repo: circleci-ecr-app-demo
-          tag: "$AWS_REGION"
+      - build-test-deploy-api-svc:
+          filters:
+            branches:
+              only:
+                - main
+          name: Build, Test & Deploy to Development
+          context: development
