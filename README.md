@@ -1,4 +1,4 @@
-# Automatically deploy private Docker images to Amazon ECR
+# Automatically deploy private Docker images to Amazon ECR  Modified (Nikhil)
 
 [![CircleCI](https://circleci.com/gh/CIRCLECI-GWP/circleci-ecr-demo.svg?style=svg)](https://circleci.com/gh/CIRCLECI-GWP/circleci-ecr-demo)
 
