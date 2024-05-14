@@ -11,6 +11,12 @@ jobs:
     docker:
       - image: cimg/node:20.13
     steps:
+      - checkout:
+          git:
+            depth: 1
+            paths:
+              only:
+                - ./tevaapi/**
       - aws-ecr/build-and-push-image:
           extra-build-args: '--compress'
           no-output-timeout: 20m
