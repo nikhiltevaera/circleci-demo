@@ -8,13 +8,13 @@ orbs:
 
 jobs:
   build-test-deploy-api-svc:
-    working_directory: ~/circle-demo/
+    working_directory: ~/circleci-demo/
     docker:
       - image: cimg/node:20.13
     steps:
-      - run: touch ~/circle-demo/tevaapi/.npmrc
+      - run: touch ./tevaapi/.npmrc
       - run: >-
-          echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/circle-demo/tevaapi/.npmrc
+          echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ./tevaapi/.npmrc
       - aws-ecr/build-and-push-image:
           extra-build-args: '--compress'
           no-output-timeout: 20m
