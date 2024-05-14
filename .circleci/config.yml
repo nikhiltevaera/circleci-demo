@@ -14,11 +14,11 @@ jobs:
     steps:
       - checkout
       - run: >-
-          echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ./tevaapi/.npmrc
+          echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ./.npmrc
       - aws-ecr/build-and-push-image:
           extra-build-args: '--compress'
           no-output-timeout: 20m
-          path: ./tevaapi/
+          path: .
           push-image: true
           repo: $AWS_ECR_API_SVC_REPO_NAME
           setup-remote-docker: true
