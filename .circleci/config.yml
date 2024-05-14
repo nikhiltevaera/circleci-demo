@@ -30,6 +30,14 @@ jobs:
       - discord/status:
           webhook: $DISCORD_ALERTS_WEBHOOK_URL
 
+  request-approval:
+    working_directory: ~/circleci-demo/
+    docker:
+      - image: cimg/node:20.13
+    steps:
+      - discord/approval:
+          webhook: $DISCORD_APPROVALS_WEBHOOK_URL
+
 
 workflows:
   deployment:
@@ -40,4 +48,14 @@ workflows:
               only:
                 - main
           name: Build, Test & Deploy to Development
+          context: aws-backend-dev
+          requires:
+            - request-approval
+
+      - hold:
+          type: approval
+          name: Hold for Approval
+          requires:
+            - request-approval
+      - request-approval:
           context: aws-backend-dev
