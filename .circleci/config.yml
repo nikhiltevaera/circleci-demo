@@ -13,7 +13,6 @@ jobs:
       - image: cimg/node:20.13
     steps:
       - checkout
-      - run: touch ./tevaapi/.npmrc
       - run: >-
           echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ./tevaapi/.npmrc
       - aws-ecr/build-and-push-image:
