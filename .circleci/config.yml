@@ -43,16 +43,9 @@ jobs:
 workflows:
   deployment:
     jobs:
-      # - build-test-deploy-api-svc:
-      #     filters:
-      #       branches:
-      #         only:
-      #           - main
-      #     name: Build, Test & Deploy to Development
-      #     context: aws-backend-dev
       - request-approval:
           context: aws-backend-dev
-      - hold:
+      - hold-job:
           type: approval
           name: Hold for Approval
           requires:
@@ -65,6 +58,6 @@ workflows:
           name: Build, Test & Deploy to Development
           context: aws-backend-dev
           requires:
-            - hold
+            - hold-job
 
       
