@@ -64,5 +64,6 @@ workflows:
           context: aws-backend-dev
           requires:
             - request-approval
+            - hold
 
       
