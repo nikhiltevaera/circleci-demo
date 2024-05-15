@@ -38,25 +38,16 @@ jobs:
     steps:
       - discord/approval:
           webhook: $DISCORD_APPROVALS_WEBHOOK_URL
-  
-  hold-job:
-    docker:
-      - image: cimg/node:20.13
-    steps:
-      - discord/approval:
-          webhook: $DISCORD_APPROVALS_WEBHOOK_URL
+
 
 
 workflows:
   deployment:
     jobs:
       - request-approval:
-          context: aws-backend-dev
-      - hold-job:
           type: approval
           name: Hold for Approval
-          requires:
-            - request-approval
+          context: aws-backend-dev
       - build-test-deploy-api-svc:
           filters:
             branches:
@@ -65,6 +56,6 @@ workflows:
           name: Build, Test & Deploy to Development
           context: aws-backend-dev
           requires:
-            - hold-job
+            - request-approval
 
       
