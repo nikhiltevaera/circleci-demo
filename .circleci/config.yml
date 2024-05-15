@@ -5,17 +5,9 @@ orbs:
   aws-ecr: circleci/aws-ecr@8.1.3
   node: circleci/node@4.7
   discord: antonioned/discord@0.1.0
-  codecov: codecov/codecov@4.1.0
+  sonarcloud: sonarsource/sonarcloud@2.0.0
 
 jobs:
-  test-and-upload-python:
-    docker:
-      - image: cimg/python:3.10
-    steps:
-      - checkout
-      - run: pip install -r requirements.txt
-      - run: pytest --cov .
-      - codecov/upload
   build-test-deploy-api-svc:
     working_directory: ~/circleci-demo/
     docker:
@@ -34,6 +26,7 @@ jobs:
           dockerfile: Dockerfile
           tag: $AWS_REGION
           create-repo: true
+      - sonarcloud/scan
       - run: >-
           aws ecs update-service --force-new-deployment --service $AWS_ECS_API_SVC_SERVICE_NAME --cluster $AWS_ECS_SHR_CLUSTER_NAME
       - discord/status:
@@ -51,7 +44,6 @@ jobs:
 workflows:
   deployment:
     jobs:
-      - test-and-upload-python
       - build-test-deploy-api-svc:
           filters:
             branches:
