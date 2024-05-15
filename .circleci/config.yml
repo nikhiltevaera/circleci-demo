@@ -38,6 +38,13 @@ jobs:
     steps:
       - discord/approval:
           webhook: $DISCORD_APPROVALS_WEBHOOK_URL
+  
+  hold-job:
+    docker:
+      - image: cimg/node:20.13
+    steps:
+      - discord/approval:
+          webhook: $DISCORD_APPROVALS_WEBHOOK_URL
 
 
 workflows:
