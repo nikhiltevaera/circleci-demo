@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  xmatters: xmatters/xmatters-orb@1.0.4
+  discord: antonioned/discord@0.1.0
 
 jobs:
   build:
@@ -14,8 +14,8 @@ jobs:
     docker:
       - image: circleci/node:4.8.2
     steps:
-      - xmatters/notify:
-          recipients: Engineering Managers
+      - discord/approval:
+#           webhook: $DISCORD_APPROVALS_WEBHOOK_URL
 
   deploy-stuff:
     docker:
@@ -35,4 +35,4 @@ workflows:
             - request-approval
       - deploy-stuff:
           requires:
-            - hold
+            - hold      
