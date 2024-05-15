@@ -15,7 +15,7 @@ jobs:
       - image: circleci/node:4.8.2
     steps:
       - discord/approval:
-#           webhook: $DISCORD_APPROVALS_WEBHOOK_URL
+          webhook: $DISCORD_APPROVALS_WEBHOOK_URL
 
   deploy-stuff:
     docker:
