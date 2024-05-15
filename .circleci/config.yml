@@ -58,7 +58,7 @@ workflows:
           name: Build, Test & Deploy to Development
           context: aws-backend-dev
           requires:
-            - request-approval
+            - hold
 
       - hold:
           type: approval
