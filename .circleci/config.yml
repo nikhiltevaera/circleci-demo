@@ -63,9 +63,8 @@ workflows:
           name: Hold for Approval
           requires:
             - request-approval
+            - build-test-deploy-api-svc
       - request-approval:
-          type: approval
-          name: Hold for Approval
           context: aws-backend-dev
 
       
