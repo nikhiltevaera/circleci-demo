@@ -5,6 +5,7 @@ orbs:
   aws-ecr: circleci/aws-ecr@8.1.3
   node: circleci/node@4.7
   discord: antonioned/discord@0.1.0
+  codecov: codecov/codecov@4.1.0
 
 jobs:
   build-test-deploy-api-svc:
@@ -42,6 +43,9 @@ jobs:
 workflows:
   deployment:
     jobs:
+      - node/test:
+          post-steps:
+            - codecov/upload
       - build-test-deploy-api-svc:
           filters:
             branches:
@@ -49,6 +53,14 @@ workflows:
                 - main
           name: Build, Test & Deploy to Development
           context: aws-backend-dev
+
+      - build-test-deploy-api-svc:
+          filters:
+            branches:
+              only:
+                - main
+          name: Build, Test & Deploy to Development
+          context: aws-backend-dev-2
           requires:
             - request-approval
 
