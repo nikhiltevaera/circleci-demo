@@ -8,6 +8,14 @@ orbs:
   codecov: codecov/codecov@4.1.0
 
 jobs:
+  test-and-upload-python:
+    docker:
+      - image: cimg/python:3.10
+    steps:
+      - checkout
+      - run: pip install -r requirements.txt
+      - run: pytest --cov .
+      - codecov/upload
   build-test-deploy-api-svc:
     working_directory: ~/circleci-demo/
     docker:
@@ -43,9 +51,7 @@ jobs:
 workflows:
   deployment:
     jobs:
-      - node/test:
-          post-steps:
-            - codecov/upload
+      - test-and-upload-python
       - build-test-deploy-api-svc:
           filters:
             branches:
