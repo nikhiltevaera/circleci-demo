@@ -20,6 +20,13 @@ parameters:
     default: ""
 
 jobs:
+  print-custom-param:
+    docker:
+      - image: cimg/node:20.13
+    steps:
+      - run: >-
+          echo "Pipeline parameter 'custom' has the value: ${{ pipeline.parameters.GHA_Action }}"
+
   build-test-deploy-api-svc:
     working_directory: ~/circleci-demo/
     docker:
@@ -51,6 +58,9 @@ jobs:
       - discord/approval:
           webhook: $DISCORD_APPROVALS_WEBHOOK_URL
 workflows:
+  echo-deploy:
+    jobs:
+      - print-custom-param
   build-deploy:
     when:
       and:
