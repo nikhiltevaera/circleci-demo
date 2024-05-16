@@ -1,7 +1,6 @@
 name: CircleCI
 on:
-  release:
-    types: [released]
+ push:
     branches:
       - main
       
