@@ -15,4 +15,5 @@ jobs:
           GHA_Meta: "custom meta-tags"
         env:
           CCI_TOKEN: ${{ secrets.CCI_TOKEN }}
+          API_URL: https://circleci.com/api/v1.1
     
