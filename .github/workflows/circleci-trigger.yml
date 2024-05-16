@@ -9,10 +9,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: CircleCI
-        id: dev-release
-        uses: CircleCI-Public/trigger-circleci-pipeline-action@v1.0.5
-        with:
-          GHA_Meta: "custom meta-tags"
+        run: >
+          curl -X POST --location "https://circleci.com/api/v2/project/gh/nikhiltevaera/circleci-demo/pipeline" \
+            -H "Content-Type: application/json" \
+            -H "Circle-Token: $CCI_TOKEN" \
+            -d '{
+                  "branch": "'$BRANCH'",
+                  "parameters": {"GHA_Actor":"nikhiltevaera","GHA_Action":"dev-release","GHA_Event":"push","GHA_Meta":"custom meta-tags"}
+                }'
         env:
           CCI_TOKEN: ${{ secrets.CCI_TOKEN }}
+          BRANCH: main
     
