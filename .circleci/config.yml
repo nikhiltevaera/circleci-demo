@@ -50,9 +50,20 @@ jobs:
     steps:
       - discord/approval:
           webhook: $DISCORD_APPROVALS_WEBHOOK_URL
-
+  echo-print:
+    docker:
+      - image: cimg/node:20.13
+    steps:
+      - run: echo "{{pipeline.parameters.GHA_Action}}"
 
 workflows:
+  echo-command:
+    # when:
+    #   and:
+    #     - and: [<< pipeline.parameters.GHA_Action >>]
+    #     - equal: ["push", << pipeline.parameters.GHA_Event >>]
+    jobs:
+      - echo-print            
   build-deploy:
     when:
       and:
