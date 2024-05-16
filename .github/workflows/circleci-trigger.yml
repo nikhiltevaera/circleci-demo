@@ -12,8 +12,6 @@ jobs:
       - name: CircleCI
         id: main-release
         uses: CircleCI-Public/trigger-circleci-pipeline-action@v1.0.4
-        with:
-          GHA_Event: "trigger-circleci"
         env:
           CCI_TOKEN: ${{ secrets.CCI_TOKEN }}
     

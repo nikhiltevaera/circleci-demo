@@ -57,7 +57,7 @@ workflows:
     when:
       and:
         - and: [<< pipeline.parameters.GHA_Action >>]
-        - equal: ["trigger-circleci", << pipeline.parameters.GHA_Event >>]
+        - equal: ["push", << pipeline.parameters.GHA_Event >>]
     jobs:         
       - request-approval:
           context: aws-backend-dev
