@@ -10,13 +10,8 @@ jobs:
     steps:
       - name: CircleCI
         run: >
-          curl -X POST --location "https://circleci.com/api/v2/project/gh/nikhiltevaera/circleci-demo/pipeline" \
-            -H "Content-Type: application/json" \
-            -H "Circle-Token: $CCI_TOKEN" \
-            -d '{
-                  "branch": "'$BRANCH'",
-                  "parameters": {"GHA_Actor":"nikhiltevaera","GHA_Action":"dev-release","GHA_Event":"push","GHA_Meta":"custom meta-tags"}
-                }'
+          curl -X POST --location "https://circleci.com/api/v2/project/gh/nikhiltevaera/circleci-demo/pipeline?circle-token=$CCI_TOKEN&branch=$BRANCH&parameters=GHA_Actor:nikhiltevaera,GHA_Action:dev-release,GHA_Event:push,GHA_Meta:custom%20meta-tags" \
+            -H "Content-Type: application/json"
         env:
           CCI_TOKEN: ${{ secrets.CCI_TOKEN }}
           BRANCH: main
