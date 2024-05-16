@@ -27,7 +27,7 @@ jobs:
       - run: >-
           aws ecs update-service --force-new-deployment --service $AWS_ECS_API_SVC_SERVICE_NAME --cluster $AWS_ECS_SHR_CLUSTER_NAME
       - discord/status:
-          webhook: $DISCORD_ALERTS_WEBHOOK_URL
+          webhook: $DISCORD_NOTIFICATIONS_WEBHOOK_URL
 
   request-approval:
     working_directory: ~/circleci-demo/
