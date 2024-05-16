@@ -53,7 +53,9 @@ jobs:
 workflows:
   build-deploy:
     when:
-      equal: [ "push", << pipeline.parameters.GHA_Event >>]
+      and:
+        - and: [<< pipeline.parameters.GHA_Action >>]
+        - equal: [ "push", << pipeline.parameters.GHA_Event >>]
     jobs:         
       - request-approval:
           context: aws-backend-dev
