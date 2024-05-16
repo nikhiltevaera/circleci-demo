@@ -5,13 +5,6 @@ on:
       - main
       
 jobs:
-  echo-job: 
-    environment: development
-    runs-on: ubuntu-latest
-    steps:
-      - name: Echo CCI Token
-        run: |
-          echo "CCI_TOKEN: ${{ secrets.CCI_TOKEN }}"
   trigger-circleci:
     environment: development
     runs-on: ubuntu-latest
