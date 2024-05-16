@@ -10,7 +10,7 @@ jobs:
     steps:
       - name: CircleCI
         id: dev-release
-        uses: CircleCI-Public/trigger-circleci-pipeline-action@v1.2.0
+        uses: CircleCI-Public/trigger-circleci-pipeline-action@v1.0.5
         with:
           GHA_Meta: "custom meta-tags"
         env:
