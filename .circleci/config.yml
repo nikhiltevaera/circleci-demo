@@ -54,14 +54,14 @@ jobs:
     docker:
       - image: cimg/node:20.13
     steps:
-      - run: echo "{{pipeline.parameters.GHA_Action}}"
+      - run: echo pipeline.parameters.GHA_Action pipeline.parameters.GHA_Event
 
 workflows:
   echo-command:
-    when:
-      and:
-        - and: [<< pipeline.parameters.GHA_Action >>]
-        - equal: ["push", << pipeline.parameters.GHA_Event >>]
+    # when:
+    #   and:
+    #     - and: [<< pipeline.parameters.GHA_Action >>]
+    #     - equal: ["push", << pipeline.parameters.GHA_Event >>]
     jobs:
       - echo-print            
   build-deploy:
