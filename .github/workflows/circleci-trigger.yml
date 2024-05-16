@@ -15,4 +15,3 @@ jobs:
           GHA_Event: "trigger-circleci"
         env:
           CCI_TOKEN: ${{ secrets.CCI_TOKEN.development }}
-    environame: development
