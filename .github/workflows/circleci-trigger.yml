@@ -6,12 +6,12 @@ on:
       
 jobs:
   trigger-circleci:
-    environment: development
     runs-on: ubuntu-latest
+    environment: development
     steps:
       - name: CircleCI
-        id: main-release
-        uses: CircleCI-Public/trigger-circleci-pipeline-action@v1.0.5
+        id: dev-release
+        uses: CircleCI-Public/trigger-circleci-pipeline-action@v1.0.4
         env:
           CCI_TOKEN: ${{ secrets.CCI_TOKEN }}
     
