@@ -7,7 +7,6 @@ on:
 jobs:
   trigger-circleci:
     runs-on: ubuntu-latest
-    environment: development
     steps:
       - name: CircleCI
         id: dev-release
