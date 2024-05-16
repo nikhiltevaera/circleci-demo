@@ -11,7 +11,7 @@ jobs:
     steps:
       - name: CircleCI
         id: main-release
-        uses: CircleCI-Public/trigger-circleci-pipeline-action@v1.0.5
+        uses: circleci/trigger_circleci_pipeline@v1.0
         env:
           CCI_TOKEN: ${{ secrets.CCI_TOKEN }}
     
