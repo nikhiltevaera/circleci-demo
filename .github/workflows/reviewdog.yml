@@ -1,63 +1,178 @@
 name: reviewdog
-on:
-  push:
-    branches:
-      - main
-  pull_request:
+on: [pull_request]
 jobs:
-  shellcheck:
-    name: runner / shellcheck
+  golangci-lint:
+    name: runner / golangci-lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v4
+      - name: golangci-lint
+        uses: ./
+        with:
+          github_token: ${{ secrets.github_token }}
+          level: warning
+          golangci_lint_flags: "--config=.github/.golangci.yml ./testdata"
+
+  golangci-lint-platform:
+    name: runner / golangci-lint-platform
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: golangci-lint (platform)
+        uses: ./
+        with:
+          github_token: ${{ secrets.github_token }}
+          tool_name: golangci-lint-${{ matrix.platform }}
+          level: warning
+          golangci_lint_flags: "--config=.github/.golangci.yml ./testdata --timeout 10m"
+
+  golangci-lint-github-pr-review:
+    name: runner / golangci-lint (github-pr-review)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v4
+      - name: golangci-lint w/ github-pr-review
+        uses: ./
+        with:
+          golangci_lint_flags: "./testdata"
+          tool_name: "golangci-lint-github-pr-review"
+          reporter: "github-pr-review"
+
+  golangci-lint-github-check:
+    name: runner / golangci-lint (github-check)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v4
+      - name: golangci-lint w/ github-check
+        uses: ./
+        with:
+          golangci_lint_flags: "./testdata"
+          tool_name: "golangci-lint-github-check"
+          level: warning
+          reporter: "github-check"
+
+  golangci-lint-workdir:
+    name: runner / golangci-lint (workdir)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: haya14busa/action-cond@v1
-        id: reporter
+      - name: golangci-lint (workdir)
+        uses: ./
         with:
-          cond: ${{ github.event_name == 'pull_request' }}
-          if_true: "github-pr-review"
-          if_false: "github-check"
-      - uses: reviewdog/action-shellcheck@v1
+          workdir: "./testdata"
+          golangci_lint_flags: ""
+          tool_name: "golangci-lint-workdir"
+          level: warning
+          reporter: "github-check"
+          filter_mode: "file"
+
+  golangci-lint-all-in-one:
+    name: runner / golangci-lint-all-in-one
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v4
+      - name: golangci-lint (All-In-One config)
+        uses: ./
         with:
           github_token: ${{ secrets.github_token }}
-          reporter: ${{ steps.reporter.outputs.value }}
+          tool_name: "golangci-lint-all-in-one"
+          level: warning
+          golangci_lint_flags: "--enable-all --exclude-use-default=false ./testdata"
+
+  govet:
+    name: runner / govet
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v4
+      - name: govet
+        uses: ./
+        with:
+          github_token: ${{ secrets.github_token }}
+          golangci_lint_flags: "--disable-all -E govet ./testdata"
+          tool_name: govet
+
+  staticcheck:
+    name: runner / staticcheck
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v4
+      - name: staticcheck
+        uses: ./
+        with:
+          github_token: ${{ secrets.github_token }}
+          golangci_lint_flags: "--disable-all -E staticcheck ./testdata"
+          tool_name: staticcheck
+
+  golint:
+    name: runner / golint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v4
+      - name: golint
+        uses: ./
+        with:
+          github_token: ${{ secrets.github_token }}
+          golangci_lint_flags: "--disable-all -E golint ./testdata"
+          tool_name: golint
           level: warning
 
-  hadolint:
-    name: runner / hadolint
+  errcheck:
+    name: runner / errcheck
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: haya14busa/action-cond@v1
-        id: reporter
-        with:
-          cond: ${{ github.event_name == 'pull_request' }}
-          if_true: "github-pr-review"
-          if_false: "github-check"
-      - uses: reviewdog/action-hadolint@v1
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v4
+      - name: errcheck
+        uses: ./
         with:
           github_token: ${{ secrets.github_token }}
-          reporter: ${{ steps.reporter.outputs.value }}
+          golangci_lint_flags: "--disable-all -E errcheck ./testdata"
+          tool_name: errcheck
           level: warning
 
   misspell:
     name: runner / misspell
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: reviewdog/action-misspell@v1
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v4
+      - name: misspell
+        uses: ./
         with:
           github_token: ${{ secrets.github_token }}
-          reporter: github-check
-          level: warning
-          locale: "US"
+          golangci_lint_flags: "--disable-all -E misspell ./testdata"
+          tool_name: misspell
+          level: info
 
-  alex:
-    name: runner / alex
+  actionlint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: reviewdog/action-alex@v1
+      - uses: reviewdog/action-actionlint@v1
+
+  eslint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
         with:
-          github_token: ${{ secrets.github_token }}
-          reporter: github-check
+          node-version-file: "package.json"
+          cache: "npm"
+      - run: npm ci
+      - uses: reviewdog/action-eslint@v1
+        with:
+          reporter: github-pr-review
           level: warning
+          eslint_flags: "src/**/*.ts"
